@@ -23,26 +23,10 @@
 
 	<repositories>
 		<repository>
-			<id>svenar-repo</id>
-			<url>https://repo.svenar.nl/</url>
-		</repository>
-		<repository>
-			<id>reload-repo</id>
-			<url>https://nexus.reloadkube.managedservices.resilient-teched.com/repository/reload/</url>
-		</repository>
-		<repository>
 			<id>papermc</id>
 			<url>https://repo.papermc.io/repository/maven-public/</url>
 		</repository>
 	</repositories>
-
-	<distributionManagement>
-		<site>
-			<id>${project.artifactId}-site</id>
-			<url>file:///tmp/dummy-site
-			</url> <!-- Needs to be defined here to avoid that "PowerCamera" is appended to the staging directory. -->
-		</site>
-	</distributionManagement>
 
 	<dependencies>
 		<dependency>
