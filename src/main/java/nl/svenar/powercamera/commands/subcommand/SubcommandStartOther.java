@@ -2,14 +2,12 @@ package nl.svenar.powercamera.commands.subcommand;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import nl.svenar.powercamera.CameraHandler;
@@ -73,47 +71,29 @@ public class SubcommandStartOther extends PowerCameraCommand {
     }
 
     private List<Player> getPlayersFromSelector(CommandSender sender, String selector) {
-        selector = selector.replace("@", "").toLowerCase();
-
-        if (selector.equals("a")) {
-            // All online players
-            return new ArrayList<>(Bukkit.getOnlinePlayers());
-        }
-
-        if (selector.equals("r")) {
-            // Random online player
-            List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
-            if (!players.isEmpty()) {
-                return List.of(players.get(new Random().nextInt(players.size())));
-            }
-            return List.of();
-        }
-
-        if (selector.equals("p")) {
-            // Nearest player to the command block or sender
-            if (sender instanceof BlockCommandSender blockSender) {
-                Location blockLocation = blockSender.getBlock().getLocation();
-                double closestDistance = Double.MAX_VALUE;
-                Player closestPlayer = null;
-
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    double distance = player.getLocation().distanceSquared(blockLocation);
-                    if (distance < closestDistance) {
-                        closestDistance = distance;
-                        closestPlayer = player;
-                    }
+        List<Player> players = new ArrayList<>();
+        
+        try {
+            // Pokud to není selector, zkusí najít hráče přímo podle jména
+            if (!selector.startsWith("@")) {
+                Player namedPlayer = Bukkit.getPlayer(selector);
+                if (namedPlayer != null) {
+                    players.add(namedPlayer);
                 }
-
-                return closestPlayer != null ? List.of(closestPlayer) : List.of();
+                return players;
             }
 
-            if (sender instanceof Player player) {
-                return List.of(player);
+            // Využití nativního parsování selectorů v Bukkitu
+            for (Entity entity : Bukkit.selectEntities(sender, selector)) {
+                if (entity instanceof Player player) {
+                    players.add(player);
+                }
             }
+        } catch (IllegalArgumentException e) {
+            // Nastane, pokud je syntaxe selectoru neplatná (např. překlep v argumentech)
+            sendMessage(sender, ChatColor.DARK_RED + "Invalid selector syntax: " + selector);
         }
-
-        Player namedPlayer = Bukkit.getPlayer(selector);
-        return namedPlayer != null ? List.of(namedPlayer) : List.of();
+        
+        return players;
     }
-
 }
