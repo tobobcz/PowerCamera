@@ -13,6 +13,8 @@
 		<!-- project version -->
 		<revision>0.9.1</revision>
 		<changelist>-SNAPSHOT</changelist>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
 	</properties>
 
 	<repositories>
@@ -35,6 +37,11 @@
         <defaultGoal>clean compile package</defaultGoal>
         <finalName>${project.name}</finalName>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.13.0</version>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
