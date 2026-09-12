@@ -1,5 +1,5 @@
-name: '${project.name}'
-version: '${project.version}'
+name: 'PowerCamera'
+version: '1.0.0'
 main: nl.svenar.powercamera.PowerCamera
 api-version: 1.20
 description: "Power Camera: Create awesome cinematic videos"
